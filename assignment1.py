@@ -92,18 +92,26 @@ def valid_date(date_str):
         return True
     except ValueError:
         return False
-    ...
-# Function to calculate a new date by adding or subtracting a number of days to/from a given date
-def dbda(start_date: str, step: int) -> str:
+   
+def dbda(date, days):
+
     """
-    Given a start date and a number of days into the past/future, return the new date.
+
+    Returns a new date by moving a specified number of days before or after a starting date.
+
     """
-    current_date = datetime.strptime(start_date, '%Y-%m-%d')  # Convert string to datetime object
-    if step > 0:
-        return after(start_date)  # Move forward in time
-    elif step < 0:
-        return before(start_date)  # Move backward in time
-    return start_date  # If step is zero, return the same date
+
+    current_date = datetime.strptime(date, '%Y-%m-%d')  # Convert string to datetime
+
+    if days >= 0:
+
+        return after(date)  # Use after() to move forward in time
+
+    else:
+
+        return before(date)  # Use before() to move backward in time
+
+
 
 # Main function to handle command-line input and output the result
 def main():
