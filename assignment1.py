@@ -32,7 +32,7 @@ def leap_year(year: int) -> bool:
     if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
         return True
     return False
-    ...
+    
 # Function to get the maximum number of days in a month, considering leap years for February
 def mon_max(month: int, year: int) -> int:
     """
@@ -62,9 +62,23 @@ def after(date: str) -> str:
         year += 1
     
     return f"{year}-{month:02}-{day:02}"  # Format date as 'YYYY-MM-DD'
+
+# Function to calculate the previous day based on a given date in 'YYYY-MM-DD' format
 def before(date: str) -> str:
-    "Returns previous day's date as YYYY-MM-DD"
-    ...
+    """
+    Returns the previous day's date in 'YYYY-MM-DD' format.
+    """
+    year, month, day = (int(x) for x in date.split('-'))
+    day -= 1  # Move to the previous day
+    
+    if day == 0:  # If the day is 0, reset to the last day of the previous month
+        month -= 1
+        if month == 0:
+            month = 12
+            year -= 1
+        day = mon_max(month, year)
+    
+    return f"{year}-{month:02}-{day:02}"  # Format date as 'YYYY-MM-DD'
 
 def usage():
     "Print a usage message to the user"
