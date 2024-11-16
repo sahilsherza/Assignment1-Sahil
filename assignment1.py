@@ -93,16 +93,43 @@ def valid_date(date_str):
     except ValueError:
         return False
     ...
-
+# Function to calculate a new date by adding or subtracting a number of days to/from a given date
 def dbda(start_date: str, step: int) -> str:
-    "given a start date and a number of days into the past/future, give date"
-    # create a loop
-    # call before() or after() as appropriate
-    # return the date as a string YYYY-MM-DD
-    ...
+    """
+    Given a start date and a number of days into the past/future, return the new date.
+    """
+    current_date = datetime.strptime(start_date, '%Y-%m-%d')  # Convert string to datetime object
+    if step > 0:
+        return after(start_date)  # Move forward in time
+    elif step < 0:
+        return before(start_date)  # Move backward in time
+    return start_date  # If step is zero, return the same date
+
+# Main function to handle command-line input and output the result
+def main():
+    if len(sys.argv) != 3:
+        usage()  # Ensure the correct number of arguments are provided
+    
+    date = sys.argv[1]
+    divisor = int(sys.argv[2])
+
+    if not valid_date(date):
+        usage()  # Ensure the provided date is valid
+    
+    if divisor <= 0:
+        usage()  # Prevent division by zero errors
+    
+    days_in_year = 365
+    divided_days = round(days_in_year / divisor)  # Divide the days in a year by the divisor
+
+    print(f"A year divided by {divisor} is {divided_days} days.")
+    
+    # Call dbda() to get the new dates after moving forward and backward by 'divided_days'
+    before_date = dbda(date, -divided_days)
+    after_date = dbda(date, divided_days)
+
+    print(f"The date {divided_days} days ago was {before_date}.")
+    print(f"The date {divided_days} days from now will be {after_date}.")
 
 if __name__ == "__main__":
-    # process command line arguments
-    # call dbda()
-    # output the result
-    ...
+    main()
