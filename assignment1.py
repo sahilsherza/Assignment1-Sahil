@@ -11,60 +11,57 @@ with anyone or anything except for submission for grading.
 I understand that the Academic Honesty Policy will be enforced and 
 violators will be reported and appropriate action will be taken.
 
-Author: <Student Name>
-Semester: <Fall/Winter/Summer> <Year>
-Description: <fill this in>
+Author: Sahil Sherzai
+Semester: Fall 2024
+Description: This script implements date manipulation functions such as leap year check,
+# calculating next and previous days, and computing the maximum days in a given month, 
+# while handling command-line input.
+
 '''
 
 import sys
+from datetime import datetime, timedelta
 
+
+
+# Function to check if a year is a leap year
 def leap_year(year: int) -> bool:
-    "return true if the year is a leap year"
+    """
+    Returns True if the given year is a leap year.
+    """
+    if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+        return True
+    return False
     ...
-
-def mon_max(month:int, year:int) -> int:
-    "returns the maximum day for a given month. Includes leap year check"
-    ...
-
-def after(date: str) -> str: 
-    '''
-    after() -> date for next day in YYYY-MM-DD string format
-
-    Return the date for the next day of the given date in YYYY-MM-DD format.
-    This function has been tested to work for year after 1582
-    '''
-    year, mon, day= (int(x) for x in date.split('-'))
-    day += 1  # next day
-
-    lyear = year % 4
-    if lyear == 0:
-        leap_flag = True
-    else:
-        leap_flag = False  # this is not a leap year
-
-    lyear = year % 100
-    if lyear == 0:
-        leap_flag = False  # this is not a leap year
-
-    lyear = year % 400
-    if lyear == 0:
-        leap_flag = True  # this is a leap year
+# Function to get the maximum number of days in a month, considering leap years for February
+def mon_max(month: int, year: int) -> int:
+    """
+    Returns the maximum number of days in the given month and year, considering leap years for February.
+    """
+    # Days in each month (Non-leap year)
+    mon_dict = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     
-    mon_dict= {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30,
-           7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
-    if mon == 2 and leap_flag:
-        mon_max = 29
-    else:
-        mon_max = mon_dict[mon]
+    if month == 2 and leap_year(year):  # February in a leap year
+        return 29
     
-    if day > mon_max:
-        mon += 1
-        if mon > 12:
-            year += 1
-            mon = 1
-        day = 1  # if tmp_day > this month's max, reset to 1 
-    return f"{year}-{mon:02}-{day:02}"
-
+    return mon_dict.get(month, 31)  # Default to 31 if month is invalid
+# Function to calculate the next day based on a given date in 'YYYY-MM-DD' format
+def after(date: str) -> str:
+    """
+    Returns the date for the next day given a starting date in 'YYYY-MM-DD' format.
+    """
+    year, month, day = (int(x) for x in date.split('-'))
+    day += 1  # Move to the next day
+    
+    if day > mon_max(month, year):  # If the day exceeds the month's max, reset to the next month
+        day = 1
+        month += 1
+    
+    if month > 12:  # If the month exceeds December, reset to January of the next year
+        month = 1
+        year += 1
+    
+    return f"{year}-{month:02}-{day:02}"  # Format date as 'YYYY-MM-DD'
 def before(date: str) -> str:
     "Returns previous day's date as YYYY-MM-DD"
     ...
@@ -74,8 +71,13 @@ def usage():
     print("Usage: " + str(sys.argv[0]) + " YYYY-MM-DD NN")
     sys.exit()
 
-def valid_date(date: str) -> bool:
-    "check validity of date"
+# Function to validate if the given date is in the correct format (YYYY-MM-DD)
+def valid_date(date_str):
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
     ...
 
 def dbda(start_date: str, step: int) -> str:
